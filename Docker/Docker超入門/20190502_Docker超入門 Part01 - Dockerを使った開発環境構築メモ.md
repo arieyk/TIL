@@ -60,7 +60,7 @@ Dockerで開発環境(Ruby on Rails)を作ってみよう。
 4. アプリを起動する
 
    ```
-   docker -compose up
+   docker-compose up
    ```
 
 5. アプリにアクセスする
@@ -72,6 +72,7 @@ Dockerで開発環境(Ruby on Rails)を作ってみよう。
 6. Railsの設定1
 
    ```
+   cd app
    gem install rails
    rails new .
    rails s -b 0.0.0.0
@@ -90,21 +91,22 @@ Dockerで開発環境(Ruby on Rails)を作ってみよう。
    →なぜかここでエラー(Could not find rake-12.3.1 in any of the sources)
 
    ```
-   docker-compose exec main bash
    rm -rf .bundle/
-   rm Gemfile.lock
    bundle install
-   rails c # => This now works
    rails s -b 0.0.0.0
    ```
-
+   
    →これ[^1]でOK
-
    
 
+   
 8. アクセスしてみる
 
-   https://localhost:3000
+   https://localhost:3000/
+   
+   →Docker Toolboxの人は、localhostではなくVirtualBoxの指定IPにする。
+   
+   http://xxx.xxx.xx.xxx:3000/
 
 
 

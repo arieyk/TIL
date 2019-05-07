@@ -14,100 +14,56 @@
 
 ## やること
 
-Dockerで開発環境(Ruby on Rails)を作ってみよう。
+前回やったDockerに入ってなにかしらインストールするは邪道。
+
+今回はそれを訂正する。
 
 
 
-## Dockerって？
+## 前回の内容をDockerfileで行う
 
-- 仮想マシンの技術(vmwareやVirtualBox)と構成管理ツール(ChefやAnsible)をあわせてようなソフト
-
-
-
-## 作ってみる
-
-1. フォルダをどこかしらに作る
-
-   ```
-   mkdir rails
-   ```
-
-2. VSCodeで作成したフォルダを開く
-
-3. 必要なファイルを作成する
+1. Dockerfileに追記
 
    - Dockerfile
 
      ```dockerfile
      FROM ruby:2.6.3-stretch
+     
+     RUN gem install rails
+     
+     RUN apt-get update && \
+     	apt-get install -y node.js
      ```
 
-   - docker-compose.yaml
+     
 
-     ```yaml
-     version: '3'
-     services:
-       app:
-         build: .
-         volumes:
-          - ".:/app"
-         ports:
-          - "3000:3000"
-         tty: true
-          
-     ```
-
-4. アプリを起動する
+2. 実行してみる
 
    ```
-   docker -compose up
+   docker-compose up --build
    ```
 
-5. アプリにアクセスする
+   buildオプションを付けると、Dockerのコンテナを破棄して新しく実行してくれる
+
+   
+
+3. アプリにアクセスする
 
    別窓で
 
    `docker exec -it rails_app_1 /bin/bash`
 
-6. Railsの設定1
+   
+
+4. Railsの設定1
 
    ```
-   gem install rails
-   rails new .
-   rails s -b 0.0.0.0
-   ```
-
-   →失敗する。RailsにはNode.jsが必要なため
-
-7. Railsの設定2
-
-   ```
-   apt-get update
-   apt-get install node.js
-   rails s -b 0.0.0.0
-   ```
-
-   →なぜかここでエラー(Could not find rake-12.3.1 in any of the sources)
-
-   ```
-   docker-compose exec main bash
-   rm -rf .bundle/
-   rm Gemfile.lock
    bundle install
-   rails c # => This now works
    rails s -b 0.0.0.0
    ```
-
-   →これ[^1]でOK
 
    
 
-8. アクセスしてみる
+5. アクセスしてみる
 
-   https://localhost:3000
-
-
-
-## 参考
-
-[^1]:[docker - rails can't find rake gem - Stack Overflow](https://stackoverflow.com/questions/49598686/rails-cant-find-rake-gem)
+   https://localhost:3000/
